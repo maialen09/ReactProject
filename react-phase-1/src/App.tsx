@@ -56,9 +56,14 @@ function App() {
 
   
 
-  const[selectedRecordId, setSelectedRecordId] = useState(0);
+  const [selectedRecordId, setSelectedRecordId] = useState(0);
   let handleRowClick = function(customerId: number){
-  setSelectedRecordId(customerId);
+    // If the customer is already selected, deselect
+    if (selectedRecordId === customerId) {
+      setSelectedRecordId(0); // Change state to 0
+    } else {
+      setSelectedRecordId(customerId); // Change state to the clicked customer ID
+    }
   }
 
 
