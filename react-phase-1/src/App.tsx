@@ -91,6 +91,8 @@ function App() {
     } else {
       setSelectedRecordId(customerId); // Change state to the clicked customer ID
     }
+    // Exit add mode when a record is clicked
+    setIsAddMode(false);
   }
 
   // Add button handler
