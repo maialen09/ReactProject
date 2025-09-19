@@ -64,9 +64,9 @@ function App() {
           </div>
 
           <div className="card">
-            <div className="card-header">
+            <div className="card-header d-flex justify-content-between align-items-center">
               <h5 className="mb-0">Customer Database</h5>
-              <div>
+              <div id="control-button-div" className='d-flex gap-2'>
                 <button id="add-button" className="btn btn-primary">Add</button>
                 <button id="update-button" className="btn btn-secondary">Update</button>
                 <button id="delete-button" className="btn btn-danger">Delete</button>
