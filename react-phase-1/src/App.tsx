@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
+import { getAll, get, deleteById, post, put } from './data/memdb.js'
+
 interface Customer {
   id: number;
   name: string;
@@ -10,50 +12,57 @@ interface Customer {
 }
 
 function App() {
+
+  //memdb data
+  const customers: Customer[] = getAll();
+  
+  // Dynamic "no selection" value - always one less than the minimum ID
+  const NO_SELECTION = customers.length > 0 ? Math.min(...customers.map(c => c.id)) - 1 : -1;
+  
   // Hard-coded customers list
-  const customers: Customer[] = [
-    {
-      id: 1,
-      name: "John Smith",
-      email: "john.smith@email.com",
-      password: "password123"
-    },
-    {
-      id: 2,
-      name: "Sarah Johnson",
-      email: "sarah.johnson@email.com",
-      password: "securepass456"
-    },
-    {
-      id: 3,
-      name: "Michael Brown",
-      email: "michael.brown@email.com",
-      password: "mypassword789"
-    },
-    {
-      id: 4,
-      name: "Emily Davis",
-      email: "emily.davis@email.com",
-      password: "strongpass321"
-    },
-    {
-      id: 5,
-      name: "David Wilson",
-      email: "david.wilson@email.com",
-      password: "userpass654"
-    },
-    {
-      id: 6,
-      name: "Lisa Anderson",
-      email: "lisa.anderson@email.com",
-      password: "password987"
-    }
-  ];
+  // const customers: Customer[] = [
+  //   {
+  //     id: 1,
+  //     name: "John Smith",
+  //     email: "john.smith@email.com",
+  //     password: "password123"
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Sarah Johnson",
+  //     email: "sarah.johnson@email.com",
+  //     password: "securepass456"
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Michael Brown",
+  //     email: "michael.brown@email.com",
+  //     password: "mypassword789"
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Emily Davis",
+  //     email: "emily.davis@email.com",
+  //     password: "strongpass321"
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "David Wilson",
+  //     email: "david.wilson@email.com",
+  //     password: "userpass654"
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Lisa Anderson",
+  //     email: "lisa.anderson@email.com",
+  //     password: "password987"
+  //   }
+  // ];
 
   // For storing the record data
   const [records, setRecords] = useState(customers);
   // For storing the selected record id
-  const [selectedRecordId, setSelectedRecordId] = useState(0);
+  const [selectedRecordId, setSelectedRecordId] = useState(NO_SELECTION);
   
   // Add mode state
   const [isAddMode, setIsAddMode] = useState(false);
@@ -87,7 +96,7 @@ function App() {
   let handleRowClick = function(customerId: number){
     // If the customer is already selected, deselect
     if (selectedRecordId === customerId) {
-      setSelectedRecordId(0); // Change state to 0
+      setSelectedRecordId(NO_SELECTION); // Change state to NO_SELECTION
     } else {
       setSelectedRecordId(customerId); // Change state to the clicked customer ID
     }
@@ -97,62 +106,69 @@ function App() {
 
   // Add button handler
   const handleAdd = () => {
-    setSelectedRecordId(0); // Clear any selection
+    setSelectedRecordId(NO_SELECTION); // Clear any selection
     setIsAddMode(true); // Enter add mode
   };
 
   // Form button handlers
   const handleCancel = () => {
-    setSelectedRecordId(0); // Deselect the record
+    setSelectedRecordId(NO_SELECTION); // Deselect the record
     setIsAddMode(false); // Exit add mode
   };
 
   const handleSave = () => {
     if (isAddMode) {
-      // Adding a new customer
-      const newId = records.length === 0 ? 1 : Math.max(...records.map(r => r.id)) + 1; // Generate new ID
-      const newCustomer: Customer = {
-        id: newId,
+      // Adding a new customer using memdb
+      const newCustomer = {
         name: formName,
         email: formEmail,
         password: formPassword
       };
       
-      // Add the new customer to the records
-      setRecords([...records, newCustomer]);
+      // Use memdb post method (it will assign ID automatically)
+      post(newCustomer);
+      
+      // Refresh records from memdb
+      setRecords(getAll());
       
       // Exit add mode and clear form
       setIsAddMode(false);
-      setSelectedRecordId(0);
+      setSelectedRecordId(NO_SELECTION);
       
-      console.log('New customer added:', newCustomer);
+      console.log('New customer added to memdb:', newCustomer);
     } else {
-      // Updating an existing customer
-      const updatedRecords = records.map(customer => 
-        customer.id === selectedRecordId 
-          ? { ...customer, name: formName, email: formEmail, password: formPassword }
-          : customer
-      );
+      // Updating an existing customer using memdb
+      const updatedCustomer = {
+        id: selectedRecordId,
+        name: formName,
+        email: formEmail,
+        password: formPassword
+      };
       
-      // Update the records
-      setRecords(updatedRecords);
+      // Use memdb put method
+      put(selectedRecordId, updatedCustomer);
+      
+      // Refresh records from memdb
+      setRecords(getAll());
       
       // Stay in update mode with the same record selected
-      console.log('Customer updated:', { id: selectedRecordId, name: formName, email: formEmail, password: formPassword });
+      console.log('Customer updated in memdb:', updatedCustomer);
     }
   };
 
   const handleDelete = () => {
-    if (selectedRecordId !== 0) {
-      // Remove the customer with the selected ID
-      const updatedRecords = records.filter(customer => customer.id !== selectedRecordId);
-      setRecords(updatedRecords);
+    if (selectedRecordId !== NO_SELECTION) {
+      // Use memdb deleteById method
+      deleteById(selectedRecordId);
+      
+      // Refresh records from memdb
+      setRecords(getAll());
       
       // Clear selection and exit any modes
-      setSelectedRecordId(0);
+      setSelectedRecordId(NO_SELECTION);
       setIsAddMode(false);
       
-      console.log('Customer deleted with ID:', selectedRecordId);
+      console.log('Customer deleted from memdb with ID:', selectedRecordId);
     }
   };
 
@@ -174,13 +190,13 @@ function App() {
               <div id="control-button-div" className='d-flex gap-2'>
                 <button 
                   id="add-button" 
-                  className={`btn ${selectedRecordId !== 0 ? 'btn-outline-primary' : 'btn-primary'}`}
-                  disabled={selectedRecordId !== 0}
+                  className={`btn ${selectedRecordId !== NO_SELECTION ? 'btn-outline-primary' : 'btn-primary'}`}
+                  disabled={selectedRecordId !== NO_SELECTION}
                   onClick={handleAdd}
                 >
                   Add
                 </button>
-                <button 
+                {/* <button 
                   id="update-button" 
                   className={`btn ${selectedRecordId === 0 ? 'btn-outline-secondary' : 'btn-secondary'}`}
                   disabled={selectedRecordId === 0}
@@ -194,7 +210,7 @@ function App() {
                   onClick={handleDelete}
                 >
                   Delete
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="card-body p-0">
@@ -237,7 +253,7 @@ function App() {
           </div>
 
           {/* Add-Update Form Section */}
-          {(selectedRecordId !== 0 || isAddMode) && (
+          {(selectedRecordId !== NO_SELECTION || isAddMode) && (
             <div className="card mt-4">
               <div className="card-header">
                 <h5 className="mb-0">
