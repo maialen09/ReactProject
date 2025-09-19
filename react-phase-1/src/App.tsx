@@ -118,50 +118,57 @@ function App() {
 
   const handleSave = () => {
     if (isAddMode) {
-      // Adding a new customer
-      const newId = records.length === 0 ? 1 : Math.max(...records.map(r => r.id)) + 1; // Generate new ID
-      const newCustomer: Customer = {
-        id: newId,
+      // Adding a new customer using memdb
+      const newCustomer = {
         name: formName,
         email: formEmail,
         password: formPassword
       };
       
-      // Add the new customer to the records
-      setRecords([...records, newCustomer]);
+      // Use memdb post method (it will assign ID automatically)
+      post(newCustomer);
+      
+      // Refresh records from memdb
+      setRecords(getAll());
       
       // Exit add mode and clear form
       setIsAddMode(false);
       setSelectedRecordId(NO_SELECTION);
       
-      console.log('New customer added:', newCustomer);
+      console.log('New customer added to memdb:', newCustomer);
     } else {
-      // Updating an existing customer
-      const updatedRecords = records.map(customer => 
-        customer.id === selectedRecordId 
-          ? { ...customer, name: formName, email: formEmail, password: formPassword }
-          : customer
-      );
+      // Updating an existing customer using memdb
+      const updatedCustomer = {
+        id: selectedRecordId,
+        name: formName,
+        email: formEmail,
+        password: formPassword
+      };
       
-      // Update the records
-      setRecords(updatedRecords);
+      // Use memdb put method
+      put(selectedRecordId, updatedCustomer);
+      
+      // Refresh records from memdb
+      setRecords(getAll());
       
       // Stay in update mode with the same record selected
-      console.log('Customer updated:', { id: selectedRecordId, name: formName, email: formEmail, password: formPassword });
+      console.log('Customer updated in memdb:', updatedCustomer);
     }
   };
 
   const handleDelete = () => {
     if (selectedRecordId !== NO_SELECTION) {
-      // Remove the customer with the selected ID
-      const updatedRecords = records.filter(customer => customer.id !== selectedRecordId);
-      setRecords(updatedRecords);
+      // Use memdb deleteById method
+      deleteById(selectedRecordId);
+      
+      // Refresh records from memdb
+      setRecords(getAll());
       
       // Clear selection and exit any modes
       setSelectedRecordId(NO_SELECTION);
       setIsAddMode(false);
       
-      console.log('Customer deleted with ID:', selectedRecordId);
+      console.log('Customer deleted from memdb with ID:', selectedRecordId);
     }
   };
 
