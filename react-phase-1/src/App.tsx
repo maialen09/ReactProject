@@ -64,7 +64,7 @@ function App() {
   const [formPassword, setFormPassword] = useState('');
   
   // Get selected customer data
-  const selectedCustomer = customers.find(customer => customer.id === selectedRecordId);
+  const selectedCustomer = records.find(customer => customer.id === selectedRecordId);
   
   // Update form when selection changes
   useEffect(() => {
@@ -108,13 +108,52 @@ function App() {
   };
 
   const handleSave = () => {
-    // TODO: Implement save functionality
-    console.log('Save clicked:', { formName, formEmail, formPassword });
+    if (isAddMode) {
+      // Adding a new customer
+      const newId = records.length === 0 ? 1 : Math.max(...records.map(r => r.id)) + 1; // Generate new ID
+      const newCustomer: Customer = {
+        id: newId,
+        name: formName,
+        email: formEmail,
+        password: formPassword
+      };
+      
+      // Add the new customer to the records
+      setRecords([...records, newCustomer]);
+      
+      // Exit add mode and clear form
+      setIsAddMode(false);
+      setSelectedRecordId(0);
+      
+      console.log('New customer added:', newCustomer);
+    } else {
+      // Updating an existing customer
+      const updatedRecords = records.map(customer => 
+        customer.id === selectedRecordId 
+          ? { ...customer, name: formName, email: formEmail, password: formPassword }
+          : customer
+      );
+      
+      // Update the records
+      setRecords(updatedRecords);
+      
+      // Stay in update mode with the same record selected
+      console.log('Customer updated:', { id: selectedRecordId, name: formName, email: formEmail, password: formPassword });
+    }
   };
 
   const handleDelete = () => {
-    // TODO: Implement delete functionality
-    console.log('Delete clicked for ID:', selectedRecordId);
+    if (selectedRecordId !== 0) {
+      // Remove the customer with the selected ID
+      const updatedRecords = records.filter(customer => customer.id !== selectedRecordId);
+      setRecords(updatedRecords);
+      
+      // Clear selection and exit any modes
+      setSelectedRecordId(0);
+      setIsAddMode(false);
+      
+      console.log('Customer deleted with ID:', selectedRecordId);
+    }
   };
 
 
@@ -152,6 +191,7 @@ function App() {
                   id="delete-button" 
                   className={`btn ${selectedRecordId === 0 ? 'btn-outline-danger' : 'btn-danger'}`}
                   disabled={selectedRecordId === 0}
+                  onClick={handleDelete}
                 >
                   Delete
                 </button>
@@ -169,7 +209,7 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {customers.map((customer) => (
+                    {records.map((customer) => (
                       <tr key={customer.id}
                                   className={customer.id==selectedRecordId?"selected":""}
                                   onClick = {(_)=>handleRowClick(customer.id)} style={{ 
