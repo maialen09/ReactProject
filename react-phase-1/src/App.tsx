@@ -53,7 +53,14 @@ function App() {
   // For storing the record data
   const [records, setRecords] = useState(customers);
   // For storing the selected record id
-  const [selectedRecordId, setSelectedRecordId] = useState(-1);
+
+  
+
+  const[selectedRecordId, setSelectedRecordId] = useState(0);
+  let handleRowClick = function(customerId: number){
+  setSelectedRecordId(customerId);
+  }
+
 
   return (
 
@@ -88,7 +95,12 @@ function App() {
                   </thead>
                   <tbody>
                     {customers.map((customer) => (
-                      <tr key={customer.id}>
+                      <tr key={customer.id}
+                                  className={customer.id==selectedRecordId?"selected":""}
+                                  onClick = {(_)=>handleRowClick(customer.id)} style={{ 
+                          cursor: 'pointer',
+                          fontWeight: selectedRecordId === customer.id ? 'bold' : 'normal'
+                        }}>
                         <th scope="row">{customer.id}</th>
                         <td>
                           <span>{customer.name}</span>
@@ -113,6 +125,10 @@ function App() {
       </div>
     </div>
   )
+
+
 }
+
+
 
 export default App
