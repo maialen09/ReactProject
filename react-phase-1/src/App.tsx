@@ -82,9 +82,26 @@ function App() {
             <div className="card-header d-flex justify-content-between align-items-center">
               <h5 className="mb-0">Customer Database</h5>
               <div id="control-button-div" className='d-flex gap-2'>
-                <button id="add-button" className="btn btn-primary">Add</button>
-                <button id="update-button" className="btn btn-secondary">Update</button>
-                <button id="delete-button" className="btn btn-danger">Delete</button>
+                <button 
+                  id="add-button" 
+                  className="btn btn-primary"
+                >
+                  Add
+                </button>
+                <button 
+                  id="update-button" 
+                  className={`btn ${selectedRecordId === 0 ? 'btn-outline-secondary' : 'btn-secondary'}`}
+                  disabled={selectedRecordId === 0}
+                >
+                  Update
+                </button>
+                <button 
+                  id="delete-button" 
+                  className={`btn ${selectedRecordId === 0 ? 'btn-outline-danger' : 'btn-danger'}`}
+                  disabled={selectedRecordId === 0}
+                >
+                  Delete
+                </button>
               </div>
             </div>
             <div className="card-body p-0">
