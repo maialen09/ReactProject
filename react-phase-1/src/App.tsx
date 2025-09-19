@@ -180,7 +180,7 @@ function App() {
                 >
                   Add
                 </button>
-                <button 
+                {/* <button 
                   id="update-button" 
                   className={`btn ${selectedRecordId === 0 ? 'btn-outline-secondary' : 'btn-secondary'}`}
                   disabled={selectedRecordId === 0}
@@ -194,7 +194,7 @@ function App() {
                   onClick={handleDelete}
                 >
                   Delete
-                </button>
+                </button> */}
               </div>
             </div>
             <div className="card-body p-0">
