@@ -50,7 +50,10 @@ function App() {
     }
   ];
 
-  const [showPasswords, setShowPasswords] = useState(false);
+  // For storing the record data
+  const [records, setRecords] = useState(customers);
+  // For storing the selected record id
+  const [selectedRecordId, setSelectedRecordId] = useState(-1);
 
   return (
 
@@ -88,10 +91,10 @@ function App() {
                       <tr key={customer.id}>
                         <th scope="row">{customer.id}</th>
                         <td>
-                          <strong>{customer.name}</strong>
+                          <span>{customer.name}</span>
                         </td>
                         <td>
-                          <span className="text-muted">{customer.email}</span>
+                          <span>{customer.email}</span>
                         </td>
                         <td>
                           <span>
