@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
@@ -53,10 +53,37 @@ function App() {
   // For storing the record data
   const [records, setRecords] = useState(customers);
   // For storing the selected record id
-
-  
-
   const [selectedRecordId, setSelectedRecordId] = useState(0);
+  
+  // Add mode state
+  const [isAddMode, setIsAddMode] = useState(false);
+  
+  // Form state variables
+  const [formName, setFormName] = useState('');
+  const [formEmail, setFormEmail] = useState('');
+  const [formPassword, setFormPassword] = useState('');
+  
+  // Get selected customer data
+  const selectedCustomer = customers.find(customer => customer.id === selectedRecordId);
+  
+  // Update form when selection changes
+  useEffect(() => {
+    if (isAddMode) {
+      // In add mode, keep form empty for new entry
+      setFormName('');
+      setFormEmail('');
+      setFormPassword('');
+    } else if (selectedCustomer) {
+      setFormName(selectedCustomer.name);
+      setFormEmail(selectedCustomer.email);
+      setFormPassword(selectedCustomer.password);
+    } else {
+      setFormName('');
+      setFormEmail('');
+      setFormPassword('');
+    }
+  }, [selectedRecordId, isAddMode]);
+
   let handleRowClick = function(customerId: number){
     // If the customer is already selected, deselect
     if (selectedRecordId === customerId) {
@@ -65,6 +92,28 @@ function App() {
       setSelectedRecordId(customerId); // Change state to the clicked customer ID
     }
   }
+
+  // Add button handler
+  const handleAdd = () => {
+    setSelectedRecordId(0); // Clear any selection
+    setIsAddMode(true); // Enter add mode
+  };
+
+  // Form button handlers
+  const handleCancel = () => {
+    setSelectedRecordId(0); // Deselect the record
+    setIsAddMode(false); // Exit add mode
+  };
+
+  const handleSave = () => {
+    // TODO: Implement save functionality
+    console.log('Save clicked:', { formName, formEmail, formPassword });
+  };
+
+  const handleDelete = () => {
+    // TODO: Implement delete functionality
+    console.log('Delete clicked for ID:', selectedRecordId);
+  };
 
 
   return (
@@ -84,7 +133,9 @@ function App() {
               <div id="control-button-div" className='d-flex gap-2'>
                 <button 
                   id="add-button" 
-                  className="btn btn-primary"
+                  className={`btn ${selectedRecordId !== 0 ? 'btn-outline-primary' : 'btn-primary'}`}
+                  disabled={selectedRecordId !== 0}
+                  onClick={handleAdd}
                 >
                   Add
                 </button>
@@ -142,6 +193,82 @@ function App() {
               </div>
             </div>
           </div>
+
+          {/* Add-Update Form Section */}
+          {(selectedRecordId !== 0 || isAddMode) && (
+            <div className="card mt-4">
+              <div className="card-header">
+                <h5 className="mb-0">
+                  {isAddMode ? 'Add New Customer' : 'Update Customer'}
+                </h5>
+              </div>
+              <div className="card-body">
+                <form>
+                  <div className="row">
+                    <div className="col-md-4 mb-3">
+                      <label htmlFor="customerName" className="form-label">Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="customerName"
+                        value={formName}
+                        onChange={(e) => setFormName(e.target.value)}
+                        placeholder="Enter customer name"
+                      />
+                    </div>
+                    <div className="col-md-4 mb-3">
+                      <label htmlFor="customerEmail" className="form-label">Email</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="customerEmail"
+                        value={formEmail}
+                        onChange={(e) => setFormEmail(e.target.value)}
+                        placeholder="Enter email address"
+                      />
+                    </div>
+                    <div className="col-md-4 mb-3">
+                      <label htmlFor="customerPassword" className="form-label">Password</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="customerPassword"
+                        value={formPassword}
+                        onChange={(e) => setFormPassword(e.target.value)}
+                        placeholder="Enter password"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="d-flex gap-2 mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={handleSave}
+                    >
+                      Save
+                    </button>
+                    {!isAddMode && (
+                      <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={handleDelete}
+                      >
+                        Delete
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>
