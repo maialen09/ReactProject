@@ -94,7 +94,7 @@ function App() {
   }, [selectedRecordId, isAddMode]);
 
   useEffect(() => {
-    customers= getAll();
+    setRecords(getAll());
   }, []);
 
   let handleRowClick = function(customerId: number){
