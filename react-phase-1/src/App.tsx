@@ -150,7 +150,8 @@ function App() {
               </div>
             </div>
             <div className="card-body p-0">
-              <div className="table-responsive">
+  
+              <div className="table-responsive" id='customer-table'>
                 <CustomerTable
                   customers={records}
                   selectedId={selectedRecordId}
