@@ -14,7 +14,7 @@ interface Customer {
 function App() {
 
   //memdb data
-  const customers: Customer[] = getAll();
+  var customers: Customer[] = getAll();
   
   // Dynamic "no selection" value - always one less than the minimum ID
   const NO_SELECTION = customers.length > 0 ? Math.min(...customers.map(c => c.id)) - 1 : -1;
@@ -92,6 +92,10 @@ function App() {
       setFormPassword('');
     }
   }, [selectedRecordId, isAddMode]);
+
+  useEffect(() => {
+    customers= getAll();
+  }, []);
 
   let handleRowClick = function(customerId: number){
     // If the customer is already selected, deselect
