@@ -41,6 +41,10 @@ function App() {
 
   const handleSave = (customer: Omit<Customer, 'id'>) => {
     if (isAddMode) {
+      if (!customer.name || !customer.email || !customer.password) {
+        alert("Please fill in all fields.");
+        return;
+      }
       post(customer);
       setRecords(getAll());
       setIsAddMode(false);
