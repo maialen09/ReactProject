@@ -19,7 +19,7 @@ function App() {
   const [recordIsUpdated, setRecordIsUpdated] = useState(false);
   const [records, setRecords] = useState<Customer[]>([]);
   console.log("Records:", records);
-  const NO_SELECTION = records.length > 0 ? Math.min(...records.map((c: Customer) => c.id)) - 1 : -1;
+  const NO_SELECTION = -1;
   const [selectedRecordId, setSelectedRecordId] = useState(NO_SELECTION);
   const [isAddMode, setIsAddMode] = useState(false);
   //const NO_SELECTION = records.length > 0 ? Math.min(...records.map(c => c.id)) - 1 : -1;
@@ -107,11 +107,15 @@ function App() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
+        
         setSelectedRecordId(NO_SELECTION);
         setIsAddMode(false);
         
         // Refresh data after delete
         setRecordIsUpdated(true);
+        console.log("no selection value" + NO_SELECTION)
+        console.log("length of the erray" + records.length)
+
       }
     } catch (error) {
       console.error('Error deleting customer:', error);

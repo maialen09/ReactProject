@@ -1,34 +1,10 @@
 {
   "customers": [
     {
-      "id": 0,
-      "name": "Mary Jackson",
-      "email": "maryj@abc.com",
-      "password": "maryjzzz"
-    },
-    {
-      "id": 1,
-      "name": "kim jgjgj",
-      "email": "kim@abc.com",
-      "password": "scottr"
-    },
-    {
-      "id": 2,
-      "name": "Scott szzzz",
-      "email": "scottr@abc.com",
-      "password": "scottr"
-    },
-    {
-      "id": 5,
-      "name": "kim Ramsey",
-      "email": "kim@abc.com",
-      "password": "scottr"
-    },
-    {
-      "name": "sdd",
-      "email": "wasadmin",
-      "password": "wasadmin",
-      "id": 6
+      "name": "Maialen ",
+      "email": "maialentorre",
+      "password": "fdhdhah",
+      "id": 1
     }
   ]
 }
