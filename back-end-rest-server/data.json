@@ -4,20 +4,31 @@
       "id": 0,
       "name": "Mary Jackson",
       "email": "maryj@abc.com",
-      "password": "maryj"
+      "password": "maryjzzz"
     },
     {
-      "id": 1,      
-      "name": "Karen Addams",
-      "email": "karena@abc.com",
-      "password": "karena"
+      "id": 1,
+      "name": "kim jgjgj",
+      "email": "kim@abc.com",
+      "password": "scottr"
     },
     {
       "id": 2,
-      "name": "Scott Ramsey",
+      "name": "Scott szzzz",
       "email": "scottr@abc.com",
       "password": "scottr"
+    },
+    {
+      "id": 5,
+      "name": "kim Ramsey",
+      "email": "kim@abc.com",
+      "password": "scottr"
+    },
+    {
+      "name": "sdd",
+      "email": "wasadmin",
+      "password": "wasadmin",
+      "id": 6
     }
   ]
-
 }
