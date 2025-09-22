@@ -13,21 +13,31 @@ export interface Customer {
 }
 
 function App() {
+
   //memdb data
   //var customers: Customer[] = getAll();
  // const NO_SELECTION = customers.length > 0 ? Math.min(...customers.map(c => c.id)) - 1 : -1;
   const [recordIsUpdated, setRecordIsUpdated] = useState(false);
-  const [records, setRecords] = useState(getAll());
+  const [records, setRecords] = useState<Customer[]>([]);
   console.log("Records:", records);
-  const NO_SELECTION = records.length > 0 ? Math.min(...records.map(c => c.id)) - 1 : -1;
+  const NO_SELECTION = records.length > 0 ? Math.min(...records.map((c: Customer) => c.id)) - 1 : -1;
   const [selectedRecordId, setSelectedRecordId] = useState(NO_SELECTION);
   const [isAddMode, setIsAddMode] = useState(false);
   //const NO_SELECTION = records.length > 0 ? Math.min(...records.map(c => c.id)) - 1 : -1;
 
   useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/customers');
+        const data = await response.json();
+        setRecords(data);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      }
+    };
+    fetchCustomers();
     setRecordIsUpdated(false);
-    setRecords(getAll());
-  }, [records, recordIsUpdated]);
+  }, [recordIsUpdated]);
 
   const handleTableSelect = (id: number) => {
     setSelectedRecordId(id);
