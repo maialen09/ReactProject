@@ -137,7 +137,7 @@ describe("Customer row selection", () => {
 
 // 5.1 Checking of the fontWeight changes when a customer is deselected
 
-describe("Changes in style when a customer is selected", () => {
+describe("Changes in the style when a customer is selected", () => {
   it('changes the fontWeight of a selected customer', async () => {
     window.fetch = async () =>
       ({
@@ -308,8 +308,8 @@ describe("Changes in style when a customer is selected", () => {
   });
 
   // 9. The buttons delete, save and cancel appear below the add-update form section
-  describe("Database name appears above table", () => {
-    it('h5 is above the table element', async () => {
+  describe("The buttons delete, save and cancel appears as required", () => {
+    it('shows the buttons below the form', async () => {
 
       window.fetch = async () =>
         ({
@@ -363,7 +363,6 @@ describe("Changes in style when a customer is selected", () => {
 
     describe("Delete customer", () => {
       it('removes the selected customer from the table when delete is clicked', async () => {
-        // Mock fetch for initial load and after deletion
         let customers = [
           { id: 1, name: "Alice", email: "alice@example.com", password: "pass1" },
           { id: 2, name: "Bob", email: "bob@example.com", password: "pass2" }
@@ -379,11 +378,9 @@ describe("Changes in style when a customer is selected", () => {
 
         render(<App />);
 
-        // Select Alice
         const aliceRow = await screen.findByText("Alice");
         await userEvent.click(aliceRow);
 
-        // Click Delete button
         const deleteButton = screen.getByRole('button', { name: /delete/i });
         await userEvent.click(deleteButton);
 
@@ -407,7 +404,6 @@ describe("Changes in style when a customer is selected", () => {
 ];
   window.fetch = async (_, options) => {
   if (options && options.method === 'PUT') {
-    // Parse the updated customer from the request body
     const updatedCustomer = JSON.parse(options.body as string);
     customers = customers.map(c =>
       c.id === updatedCustomer.id ? updatedCustomer : c
@@ -468,10 +464,10 @@ await userEvent.click(saveButton);
 })
 })
   
-// 12.3
+// 12.3 When the field is empty the placeholder should be replaced with the typed text 
 
-describe("Customer Table Loading", ()=> {
-    it('loads the customer table', async () => {
+describe("Empty input should be replaced with typed text", ()=> {
+    it('replace the empty inputs with the text inserted', async () => {
     render(<App />);
 
     // Changing values of the add form
@@ -505,8 +501,8 @@ describe("Customer Table Loading", ()=> {
 
 //13 Clicking the save button after modifying the fields of the add-update form saves the changes correctly and updates the list of customers
 
-describe("Customer Table Loading", ()=> {
-    it('loads the customer table', async () => {
+describe("Save button management", ()=> {
+    it('shows that the save button functions at it should', async () => {
 
       let customers = [
             { id: 1, name: "Peter", email: "peter@example.com", password: "pass180" },
@@ -609,12 +605,12 @@ describe("Customer Table Loading", ()=> {
   expect(screen.getByText(/Add New Customer/i)).toBeInTheDocument();
 
 
-  //14
+  //14 --> 13.4.1
 
   //15 Clicking the cancel button should de-select the selected record
 
-  describe("Customer Table Loading", ()=> {
-    it('loads the customer table', async () => {
+  describe("Cancel button is working correctly", ()=> {
+    it('shows that the cancel button functions at it should', async () => {
       window.fetch = async () =>
         ({
           ok: true,
@@ -649,12 +645,12 @@ describe("Customer Table Loading", ()=> {
 })
 })
 
-// 16 
+// 16 --> 15.2.2
 
 // 17 New data can be typed in the add form whhen there is no selected customer
 
-describe("Customer Table Loading", ()=> {
-    it('loads the customer table', async () => {
+describe("Insertion of new data when no record is selected", ()=> {
+    it('adds correctly the data of a new customer', async () => {
     render(<App />);
 
     const addButton = screen.getByRole('button', { name: /add/i });
@@ -685,8 +681,8 @@ describe("Customer Table Loading", ()=> {
 
   //18 Clicking Save when no record is selected and when data has been entered into the Add-update form fields should add a new record
 
-  describe("Customer Table Loading", ()=> {
-    it('loads the customer table', async () => {
+  describe("Save button updates the changes", ()=> {
+    it('updates correctly the changes using the save button ', async () => {
     render(<App />);
 
     const addButton = screen.getByRole('button', { name: /add/i });
