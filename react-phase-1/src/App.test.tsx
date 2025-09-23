@@ -396,34 +396,6 @@ describe("Changes in style when a customer is selected", () => {
     });
 
 
-  // 12. Users are able to modify the fields of the add-update form
-
-  describe("Modifying fields of the form", ()=> {
-    it('changes correctly the input values of the form', () => {
-      window.fetch = async () =>
-        ({
-          ok: true,
-          json: async () => [
-            { id: 1, name: "Tom", email: "tom@example.com", password: "pass10" },
-            { id: 2, name: "Leo", email: "leo@example.com", password: "pass11" }
-          ]
-        } as Response);
-    render(<App />);
-
-    // Changing the values of the update form 
-
-    const leoRow = screen.getByText("Leo");
-    userEvent.click(leoRow);  
-
-    const nameInput = screen.getByLabelText(/name/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i); 
-
-    const nameValue = nameInput.getAttribute('value');
-
-})
-})
   
-
   });
     });
