@@ -31,7 +31,6 @@ jobs:
 
       - name: Build the React app
         run: |
-          cd react-phase-1
           npm run build
 
 
