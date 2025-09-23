@@ -150,8 +150,8 @@ function App() {
               </div>
             </div>
             <div className="card-body p-0">
-
-              <div style={{ maxHeight: '300px', overflowY: 'auto' }} data-testid='customer-table'>
+  
+              <div className="table-responsive" data-testid='customer-table'>
                 <CustomerTable
                   customers={records}
                   selectedId={selectedRecordId}

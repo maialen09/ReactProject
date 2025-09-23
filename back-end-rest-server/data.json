@@ -13,10 +13,10 @@
       "id": 2
     },
     {
-      "name": "ccc",
-      "email": "example@lol.com",
-      "password": "wasadmin",
-      "id": 3
+      "id": 3,
+      "name": "",
+      "email": "",
+      "password": ""
     },
     {
       "name": "example@lol.com",

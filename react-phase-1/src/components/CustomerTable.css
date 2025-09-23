@@ -1,0 +1,26 @@
+.table-fixed-header{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-fixed-header thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    /*background-color: red; /* Change this to your desired background color */
+}
+
+/* Ensuring only the body scrolls */
+.table-fixed-header tbody {
+    display: block;
+    max-height: 300px; /* Set your desired height */
+    overflow-y: auto;
+}
+
+/* Heaap header/body column widths aligned */
+.table-fixed-header thead, .table-fixed-header tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Ensures that the columns have a fixed width */
+}
+
