@@ -3,7 +3,6 @@ import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import userEvent from '@testing-library/user-event';
 import App from './App';
-import { wait } from '@testing-library/user-event/dist/cjs/utils/index.js';
 
 
 // 1.1 Checking that the table of customers loads
@@ -526,7 +525,6 @@ describe("Save button management", ()=> {
     const mickRow = await screen.findByText("Mick");
     await userEvent.click(mickRow); 
 
-    const peterRow = await screen.findByText("Peter");
 
     //13.2 When the customer is selected, the form appears correctly 
 
