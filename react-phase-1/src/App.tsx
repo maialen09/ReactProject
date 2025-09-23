@@ -168,6 +168,8 @@ function App() {
               </div>
             </div>
           </div>
+          <br></br>
+          <p className="number-of-customers">Number of Customers: {records.length}</p>
           {(selectedRecordId !== NO_SELECTION || isAddMode) && (
             <CustomerForm
               mode={isAddMode ? 'add' : 'update'}

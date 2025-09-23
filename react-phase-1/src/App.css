@@ -1,4 +1,4 @@
-.selected{
-    background-color: yellow;
-    color: blue;
-}
+.number-of-customers {
+    font-weight: bold;
+    margin-top: 10px;
+}   
