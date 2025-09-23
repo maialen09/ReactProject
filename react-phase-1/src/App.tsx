@@ -150,8 +150,8 @@ function App() {
               </div>
             </div>
             <div className="card-body p-0">
-  
-              <div className="table-responsive" data-testid='customer-table'>
+
+              <div style={{ maxHeight: '300px', overflowY: 'auto' }} data-testid='customer-table'>
                 <CustomerTable
                   customers={records}
                   selectedId={selectedRecordId}
@@ -172,6 +172,7 @@ function App() {
             <CustomerForm
               mode={isAddMode ? 'add' : 'update'}
               customer={isAddMode ? undefined : selectedCustomer}
+              customers={records}
               onSave={handleSave}
               onDelete={handleDelete}
               onCancel={handleCancel}
