@@ -27,7 +27,7 @@ jobs:
       - name: Run the testing
         run: |
             cd react-phase-1
-            npm run test -- --coverage
+            npm run test --coverage
 
       - name: Build the React app
         run: |
