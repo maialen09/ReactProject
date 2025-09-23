@@ -4,16 +4,18 @@ import type { Customer } from '../App';
 interface CustomerFormProps {
   mode: 'add' | 'update';
   customer?: Customer;
+  customers: Customer[];
   onSave: (customer: Omit<Customer, 'id'>) => void;
   onDelete: () => void;
   onCancel: () => void;
 }
 
-const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, onSave, onDelete, onCancel }) => {
+const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, customers, onSave, onDelete, onCancel }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  
+//sets the form fields when the mode or customer changes
   useEffect(() => {
     if (mode === 'add') {
       setName('');
@@ -26,13 +28,25 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, onSave, onD
     }
   }, [mode, customer]);
 
+// Check for duplicate customer (by email)
+  const isDuplicateCustomer = (email: string) => {
+    return customers.some(
+      c => c.email === email && (mode === 'add' || (customer && c.id !== customer.id))
+    );
+  };
+
+//handles the save button click and checks the email before saving
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (checkEmail(email)) {
-      onSave({ name, email, password });
+    if (!checkEmail(email)) return;
+    if (isDuplicateCustomer(email)) {
+      alert('A customer with this email already exists.');
+      return;
     }
+    onSave({ name, email, password });
   };
   
+  //check the email, to see if it is valid (means it contains @ and .)
   const checkEmail = (email: any) => {
     let mail = email as string;
     if (mail.includes('@') && mail.includes('.')) {
@@ -73,8 +87,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, onSave, onD
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter email address"
-          //required
-         // pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
               />
             </div>
             <div className="col-md-4 mb-3">
