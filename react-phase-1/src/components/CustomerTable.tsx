@@ -11,6 +11,7 @@ interface CustomerTableProps {
 const CustomerTable: React.FC<CustomerTableProps> = ({ customers, selectedId, onRowClick }) => {
   return (
     <table className="table table-striped table-hover mb-0 table-fixed-header">
+      {/* Table Header */}
       <thead className="table-dark">
         <tr>
           <th scope="col">#</th>
@@ -19,7 +20,9 @@ const CustomerTable: React.FC<CustomerTableProps> = ({ customers, selectedId, on
           <th scope="col">Password</th>
         </tr>
       </thead>
+      {/* Table Body */}
       <tbody>
+        {/* Render each customer row by mapping over the customers array and creating a table row for each customer */}
         {customers.map((customer) => (
           <tr
             key={customer.id}

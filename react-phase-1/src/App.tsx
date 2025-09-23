@@ -15,7 +15,7 @@ function App() {
 
   //memdb data
   //var customers: Customer[] = getAll();
- // const NO_SELECTION = customers.length > 0 ? Math.min(...customers.map(c => c.id)) - 1 : -1;
+  // const NO_SELECTION = customers.length > 0 ? Math.min(...customers.map(c => c.id)) - 1 : -1;
   const [recordIsUpdated, setRecordIsUpdated] = useState(false);
   const [records, setRecords] = useState<Customer[]>([]);
   console.log("Records:", records);
@@ -24,34 +24,40 @@ function App() {
   const [isAddMode, setIsAddMode] = useState(false);
   //const NO_SELECTION = records.length > 0 ? Math.min(...records.map(c => c.id)) - 1 : -1;
 
+  // fetch customers from API
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
         const response = await fetch('http://localhost:4000/customers');
         const data = await response.json();
+        // Update state with fetched data
         setRecords(data);
       } catch (error) {
         console.error("Error fetching customers:", error);
       }
     };
     fetchCustomers();
+    // Reset the recordIsUpdated flag after fetching so that future updates can trigger refetch
     setRecordIsUpdated(false);
   }, [recordIsUpdated]);
 
+  // Handle Add Customer
   const handleAdd = () => {
     setSelectedRecordId(NO_SELECTION);
     setIsAddMode(true);
   };
 
+  // Handle Save (for both Add and Update)
   const handleSave = async (customer: Omit<Customer, 'id'>) => {
     try {
+      // Logic for adding a customer
       if (isAddMode) {
         if (!customer.name || !customer.email || !customer.password) {
           alert("Please fill in all fields.");
           return;
         }
-        
-        // POST request for new customer
+
+        // POST request for adding a new customer
         const response = await fetch('http://localhost:4000/customers', {
           method: 'POST',
           headers: {
@@ -59,14 +65,16 @@ function App() {
           },
           body: JSON.stringify(customer),
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
+        // Exit add mode and ensure no record is selected
         setIsAddMode(false);
         setSelectedRecordId(NO_SELECTION);
-        
+
+        // Logic for updating a customer
       } else if (selectedRecordId !== NO_SELECTION) {
         // PUT request for updating existing customer
         const response = await fetch(`http://localhost:4000/customers/${selectedRecordId}`, {
@@ -76,19 +84,19 @@ function App() {
           },
           body: JSON.stringify({ id: selectedRecordId, ...customer }),
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         // Keep selection on updated record
         setSelectedRecordId(selectedRecordId);
-        console.log("Updated customer with ID:", selectedRecordId); 
+        console.log("Updated customer with ID:", selectedRecordId);
       }
-      
+
       // Refresh data after save
       setRecordIsUpdated(true);
-      
+
     } catch (error) {
       console.error('Error saving customer:', error);
       alert('Failed to save customer. Please check the server connection.');
@@ -102,19 +110,19 @@ function App() {
         const response = await fetch(`http://localhost:4000/customers/${selectedRecordId}`, {
           method: 'DELETE',
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
-        
+
+        // Clear selection and ensure not in add mode
         setSelectedRecordId(NO_SELECTION);
         setIsAddMode(false);
-        
+
         // Refresh data after delete
         setRecordIsUpdated(true);
-        console.log("no selection value" + NO_SELECTION)
-        console.log("length of the erray" + records.length)
+        // console.log("no selection value" + NO_SELECTION)
+        // console.log("length of the array" + records.length)
 
       }
     } catch (error) {
@@ -123,11 +131,13 @@ function App() {
     }
   };
 
+  // If the user clicks cancel, we clear the selection and exit add mode
   const handleCancel = () => {
     setSelectedRecordId(NO_SELECTION);
     setIsAddMode(false);
   };
 
+  // Find the selected customer based on selectedRecordId
   const selectedCustomer = records.find(c => c.id === selectedRecordId);
 
   return (
@@ -135,15 +145,19 @@ function App() {
       <div className="row">
         <div className="col-12">
           <div className="d-flex justify-content-between align-items-center mb-4"></div>
+          {/* If not in add mode and a record is selected, show a warning to clear selection before adding */}
           {!isAddMode && selectedRecordId !== NO_SELECTION && (
             <div className='error-message'>⚠️ Please remove the current selection to enable the add button</div>
           )}
+          {/* Start of card holding customer table */}
           <div className="card">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h5 className="mb-0">Customer List</h5>
+              
+              {/* Add Button */}
               <div id="control-button-div" className='d-flex gap-2'>
-                <button 
-                  id="add-button" 
+                <button
+                  id="add-button"
                   className={`btn ${selectedRecordId !== NO_SELECTION ? 'btn-outline-primary' : 'btn-primary'}`}
                   disabled={selectedRecordId !== NO_SELECTION}
                   onClick={handleAdd}
@@ -152,8 +166,10 @@ function App() {
                 </button>
               </div>
             </div>
-            <div className="card-body p-0">
 
+            {/* Body of card holding customer table */}
+            <div className="card-body p-0">
+              {/* Scrollable Table */}
               <div style={{ maxHeight: '300px', overflowY: 'auto' }} data-testid='customer-table'>
                 <CustomerTable
                   customers={records}
@@ -172,7 +188,9 @@ function App() {
             </div>
           </div>
           <br></br>
+          {/* Display number of customers */}
           <p className="number-of-customers">Number of Customers: {records.length}</p>
+          {/* Add/Update Form, shows if there is no selection and in add mode*/}
           {(selectedRecordId !== NO_SELECTION || isAddMode) && (
             <CustomerForm
               mode={isAddMode ? 'add' : 'update'}

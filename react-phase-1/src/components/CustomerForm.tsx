@@ -14,8 +14,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, customers, 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-//sets the form fields when the mode or customer changes
+
+  //sets the form fields when the mode or customer changes
   useEffect(() => {
     if (mode === 'add') {
       setName('');
@@ -28,14 +28,14 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, customers, 
     }
   }, [mode, customer]);
 
-// Check for duplicate customer (by email)
+  // Check for duplicate customer (by email)
   const isDuplicateCustomer = (email: string) => {
     return customers.some(
       c => c.email === email && (mode === 'add' || (customer && c.id !== customer.id))
     );
   };
 
-//handles the save button click and checks the email before saving
+  //handles the save button click and checks the email before saving
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!checkEmail(email)) return;
@@ -45,64 +45,71 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, customers, 
     }
     onSave({ name, email, password });
   };
-  
+
   //check the email, to see if it is valid (means it contains @ and .)
   const checkEmail = (email: any) => {
     let mail = email as string;
     if (mail.includes('@') && mail.includes('.')) {
       return true;
-    }else {
-      alert("Please enter a valid email address."); 
+    } else {
+      alert("Please enter a valid email address.");
     }
     return false;
   };
 
   return (
+    // Start of form card
     <div className="card mt-4">
+      {/*  Card Header */}
       <div className="card-header">
         <h5 className="mb-0">{mode === 'add' ? 'Add New Customer' : 'Update Customer'}</h5>
       </div>
+      {/* Card Body */}
       <div className="card-body">
         <form onSubmit={handleSave} data-testid='customer-form'>
           <div className="row">
+            {/* Name Label & Input */}
             <div className="col-md-4 mb-3">
               <label htmlFor="customerName" className="form-label">Name</label>
               <input
-          type="text"
-          className="form-control"
-          id="customerName"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter customer name"
-          required
-          minLength={1}
+                type="text"
+                className="form-control"
+                id="customerName"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter customer name"
+                required
+                minLength={1}
               />
             </div>
+            {/* Email Label & Input */}
             <div className="col-md-4 mb-3">
               <label htmlFor="customerEmail" className="form-label">Email</label>
               <input
-          type="email"
-          className="form-control"
-          id="customerEmail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter email address"
+                type="email"
+                className="form-control"
+                id="customerEmail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter email address"
               />
             </div>
+            {/* Password Label & Input */}
             <div className="col-md-4 mb-3">
               <label htmlFor="customerPassword" className="form-label">Password</label>
               <input
-          type="password"
-          className="form-control"
-          id="customerPassword"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter password"
-          required
-          minLength={1}
+                type="password"
+                className="form-control"
+                id="customerPassword"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                required
+                minLength={1}
               />
             </div>
           </div>
+          {/* Buttons: Save, Delete (if update), Cancel */}
           <div className="d-flex gap-2 mt-3">
             <button type="submit" className="btn btn-primary" onClick={handleSave}>Save</button>
             {mode === 'update' && (

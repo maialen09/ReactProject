@@ -29,6 +29,7 @@
     white-space: nowrap;
 }
 
+/* Zebra striping for rows, row hover styles */
 .table {
     --bs-table-striped-bg: var(--brand-light-navy);
     --bs-table-hover-bg: var(--brand-light-red);
