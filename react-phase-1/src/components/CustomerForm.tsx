@@ -37,7 +37,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, onSave, onD
         <h5 className="mb-0">{mode === 'add' ? 'Add New Customer' : 'Update Customer'}</h5>
       </div>
       <div className="card-body">
-        <form onSubmit={handleSave}>
+        <form onSubmit={handleSave} data-testid='customer-form'>
           <div className="row">
             <div className="col-md-4 mb-3">
               <label htmlFor="customerName" className="form-label">Name</label>

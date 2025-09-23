@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {render, screen} from '@testing-library/react';
+import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import userEvent from '@testing-library/user-event';
 import App from './App';
@@ -262,15 +262,137 @@ describe("Changes in style when a customer is selected", () => {
       expect(screen.queryByText(/Add New Customer/i)).not.toBeInTheDocument();
 
 
-
-
-
-
     });
   });
 
+  // 8. The add-update form shows the name, email and password of the selected customer 
+  describe("Update form appears and populates correctly", () => {
+    it('shows update form with correct data when a customer row is clicked', async () => {
+      window.fetch = async () =>
+        ({
+          ok: true,
+          json: async () => [
+            { id: 1, name: "Tom", email: "tom@example.com", password: "pass10" },
+            { id: 2, name: "Leo", email: "leo@example.com", password: "pass11" }
+          ]
+        } as Response);
+
+      render(<App />);
+
+      const tomRow = await screen.findByText("Tom");
+      const leoRow = await screen.findByText("Leo");
+
+      // Simulate clicking on Alice's row
+      await userEvent.click(tomRow);
+
+      // Check that the update form appears and is populated with Tom's data
+      const nameInput = screen.getByLabelText(/name/i);
+      const emailInput = screen.getByLabelText(/email/i);
+      const passwordInput = screen.getByLabelText(/password/i);
+
+      expect(nameInput).toHaveValue("Tom");
+      expect(emailInput).toHaveValue("tom@example.com");
+      expect(passwordInput).toHaveValue("pass10");
+
+      // Simulate clicking again to deselect
+      await userEvent.click(leoRow);
+
+      // Check that the update form appears and is populated with Leo's data
+      expect(nameInput).toHaveValue("Leo");
+      expect(emailInput).toHaveValue("leo@example.com");
+      expect(passwordInput).toHaveValue("pass11");
+
+      
+    });
+  });
+
+  // 9. The buttons delete, save and cancel appear below the add-update form section
+  describe("Database name appears above table", () => {
+    it('h5 is above the table element', async () => {
+
+      window.fetch = async () =>
+        ({
+          ok: true,
+          json: async () => [
+            { id: 1, name: "Tom", email: "tom@example.com", password: "pass10" },
+            { id: 2, name: "Leo", email: "leo@example.com", password: "pass11" }
+          ]
+        } as Response);
+
+        render(<App />);
+
+       const addButton = screen.getByRole('button', { name: /add/i });
+       await userEvent.click(addButton);
+
+        // Check that the buttons appear below the add-update form
+        const form = screen.getByTestId('customer-form');
+        const saveButton = screen.getByRole('button', { name: /save/i });
+        const cancelButton = screen.getByRole('button', { name: /cancel/i });
+
+        // Check that the buttons are in the document
+        expect(saveButton).toBeInTheDocument();
+        expect(cancelButton).toBeInTheDocument();
+
+        // Check that the buttons appear after the form in the DOM
+        expect(form.compareDocumentPosition(saveButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+        expect(form.compareDocumentPosition(cancelButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    
+        // When trying to add a new customer the delete button should not be present
+        expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
+
+        
+        const tomRow = await screen.findByText("Tom");
+        await userEvent.click(tomRow);
+
+        //When trying to update a customer the delete button should be present
+
+        const saveButtonUpdate = screen.getByRole('button', { name: /save/i });
+        const cancelButtonUpdate = screen.getByRole('button', { name: /cancel/i });
+        const DeleteButtonUpdate = screen.getByRole('button', { name: /delete/i });
+
+        expect(form.compareDocumentPosition(saveButtonUpdate) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+        expect(form.compareDocumentPosition(cancelButtonUpdate) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+        expect(form.compareDocumentPosition(DeleteButtonUpdate) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+             
+    
+      });
 
 
+      //10. The delete button works correctly and removes the selected customer from the list
 
+    describe("Delete customer", () => {
+      it('removes the selected customer from the table when delete is clicked', async () => {
+        // Mock fetch for initial load and after deletion
+        let customers = [
+          { id: 1, name: "Alice", email: "alice@example.com", password: "pass1" },
+          { id: 2, name: "Bob", email: "bob@example.com", password: "pass2" }
+        ];
+        window.fetch = async (_, options) => {
+          if (options && options.method === 'DELETE') {
+            // Simulate deletion by removing Alice
+            customers = customers.filter(c => c.id !== 1);
+            return { ok: true, json: async () => ({}) } as Response;
+          }
+          return { ok: true, json: async () => customers } as Response;
+        };
 
+        render(<App />);
+
+        // Select Alice
+        const aliceRow = await screen.findByText("Alice");
+        await userEvent.click(aliceRow);
+
+        // Click Delete button
+        const deleteButton = screen.getByRole('button', { name: /delete/i });
+        await userEvent.click(deleteButton);
+
+        // Alice should disappear from the table
+        await waitFor(() => {
+        expect(screen.queryByText("Alice")).not.toBeInTheDocument();
 });
+        // Bob should still be present
+        expect(screen.getByText("Bob")).toBeInTheDocument();
+      });
+    });
+  });
+    });
