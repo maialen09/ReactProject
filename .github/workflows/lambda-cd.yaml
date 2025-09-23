@@ -1,8 +1,8 @@
 name: React Project Phase 1 CI/CD
-on:
-  push:
-    branches: [ "Release5" ]
+on: [push]
+
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
@@ -12,3 +12,29 @@ jobs:
       - name: Echo to standard output
         run:
           echo "This is a placeholder step. Add your build and deployment steps here."  
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: |
+          cd react-phase-1
+          npm install --cpu=x64 --os=linux sharp --include=optional
+          cd ..
+          cd back-end-rest-server
+          npm install --cpu=x64 --os=linux sharp --include=optional
+
+      - name: Run the testing
+        run: |
+            cd react-phase-1
+            npm run test -- --coverage
+
+      - name: Build the React app
+        run: |
+          cd react-phase-1
+          npm run build
+
+
+
+
+
