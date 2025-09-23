@@ -3,6 +3,7 @@ import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import userEvent from '@testing-library/user-event';
 import App from './App';
+import { wait } from '@testing-library/user-event/dist/cjs/utils/index.js';
 
 
 // 1.1 Checking that the table of customers loads
@@ -460,11 +461,292 @@ await userEvent.click(saveButton);
 
 });
 
+
+
     
 
 })
 })
   
+// 12.3
+
+describe("Customer Table Loading", ()=> {
+    it('loads the customer table', async () => {
+    render(<App />);
+
+    // Changing values of the add form
+    const addButton = screen.getByRole('button', { name: /add/i });
+    await userEvent.click(addButton);
+
+    const nameInputAdd = screen.getByLabelText(/name/i);
+    const emailInputAdd = screen.getByLabelText(/email/i);
+    const passwordInputAdd = screen.getByLabelText(/password/i);  
+
+    // Checking that the fields are empty
+    expect(nameInputAdd).toHaveValue('');   
+    expect(emailInputAdd).toHaveValue('');
+    expect(passwordInputAdd).toHaveValue('');
+
+    // Typing new values in the fields
+
+    await userEvent.type(nameInputAdd, 'Charlie');
+    await userEvent.type(emailInputAdd, 'charlie@gmail.com');
+    await userEvent.type(passwordInputAdd, 'charlie123');
+
+    //Checking that the values are correct
+    expect(nameInputAdd).toHaveValue('Charlie');   
+    expect(emailInputAdd).toHaveValue('charlie@gmail.com');
+    expect(passwordInputAdd).toHaveValue('charlie123');
+
+
+    
+})
+})
+
+//13 Clicking the save button after modifying the fields of the add-update form saves the changes correctly and updates the list of customers
+
+describe("Customer Table Loading", ()=> {
+    it('loads the customer table', async () => {
+
+      let customers = [
+            { id: 1, name: "Peter", email: "peter@example.com", password: "pass180" },
+            { id: 2, name: "Mick", email: "mick@example.com", password: "pass965" }
+          ]
+        
+
+        window.fetch = async (_, options) => {
+  if (options && options.method === 'PUT') {
+    // Parse the updated customer from the request body
+    const updatedCustomer = JSON.parse(options.body as string);
+    customers = customers.map(c =>
+      c.id === updatedCustomer.id ? updatedCustomer : c
+    );
+    return { ok: true, json: async () => updatedCustomer } as Response;
+  }
+  return { ok: true, json: async () => customers } as Response;
+};
+    render(<App />);
+
+    const mickRow = await screen.findByText("Mick");
+    await userEvent.click(mickRow); 
+
+    const peterRow = await screen.findByText("Peter");
+
+    //13.2 When the customer is selected, the form appears correctly 
+
+    expect(screen.getByRole('heading', { level: 5, name: /Update Customer/i })).toBeInTheDocument();
+
+    //13.3 The fields modify correctly
+
+    const nameInput = screen.getByLabelText(/name/i);
+    const emailInput = screen.getByLabelText(/email/i);
+
+    await userEvent.clear(emailInput);
+    await userEvent.clear(nameInput);
+
+    await userEvent.type(nameInput, 'Charlie');
+    await userEvent.type(emailInput, 'charlie@gmail.com');
+
+    //Checking that the values are correct
+    expect(nameInput).toHaveValue('Charlie');   
+    expect(emailInput).toHaveValue('charlie@gmail.com');
+
+
+  // 13.4 Saving the changes
+
+  const saveButton = screen.getByRole('button', { name: /save/i });
+  await userEvent.click(saveButton);
+
+  await waitFor(() => {
+    expect(screen.getByText("Charlie")).toBeInTheDocument();
+    expect(screen.getByText("charlie@gmail.com")).toBeInTheDocument();
+    expect(screen.getByText("pass965")).toBeInTheDocument();
+
+  });
+
+  // 13.4.2 No selected customers after the saved
+
+  const cancelButton = screen.getByRole('button', { name: /cancel/i });
+  await userEvent.click(cancelButton);
+
+  const charlieRow = await screen.findByText("Charlie");
+  const charlieTr = charlieRow.closest('tr');
+  await waitFor(() => {
+    expect(charlieTr).toHaveStyle({ fontWeight: 'normal' });
+  });
+
+  const peterRowUpdated = await screen.findByText("Peter");
+  const peterTr = peterRowUpdated.closest('tr');
+  await waitFor(() => {
+    expect(peterTr).toHaveStyle({ fontWeight: 'normal' });
+  });
+
+  // 13.4.3 The add form appears correctly again
+
+  const addButton = screen.getByRole('button', { name: /add/i });
+  await userEvent.click(addButton);
+
+  const nameInputAdd = screen.getByLabelText(/name/i);
+  const emailInputAdd = screen.getByLabelText(/email/i);
+  const passwordInputAdd = screen.getByLabelText(/password/i);
+
+  await waitFor(() => { 
+  const nameValue = nameInputAdd.getAttribute('value');
+
+  expect(nameValue).toBe("");});
+
+  await waitFor(() => {
+  const emailValue = emailInputAdd.getAttribute('value');
+  expect(emailValue).toBe("");});
+
+  await waitFor(() => { 
+  const passwordValue = passwordInputAdd.getAttribute('value');
+
+  expect(passwordValue).toBe(""); });
+
+  // 13.4.4 The name of the form is changed to Add
+
+  expect(screen.getByText(/Add New Customer/i)).toBeInTheDocument();
+
+
+  //14
+
+  //15 Clicking the cancel button should de-select the selected record
+
+  describe("Customer Table Loading", ()=> {
+    it('loads the customer table', async () => {
+      window.fetch = async () =>
+        ({
+          ok: true,
+          json: async () => [
+            { id: 1, name: "Tim", email: "tim@example.com", password: "pass10" },
+            { id: 2, name: "Leo", email: "leo@example.com", password: "pass11" }
+          ]
+        } as Response);
+    render(<App />);
+
+    const timRow = await screen.findByText("Tim");
+    const leoRow = await screen.findByText("Leo");
+    await userEvent.click(timRow);  
+
+    // Checking that Tim is selected 
+    const timTr = timRow.closest('tr');
+    expect(timTr).toHaveStyle({ fontWeight: 'bold' });
+
+    const leoTr = leoRow.closest('tr');
+    expect(leoTr).toHaveStyle({ fontWeight: 'normal' });
+
+    // Clicking the cancel button
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
+    await userEvent.click(cancelButton);
+
+    // Checking that no customer is selected
+    expect(timTr).toHaveStyle({ fontWeight: 'normal'});
+    expect(leoTr).toHaveStyle({ fontWeight: 'normal'}); 
+
+
+
+})
+})
+
+// 16 
+
+// 17 New data can be typed in the add form whhen there is no selected customer
+
+describe("Customer Table Loading", ()=> {
+    it('loads the customer table', async () => {
+    render(<App />);
+
+    const addButton = screen.getByRole('button', { name: /add/i });
+    await userEvent.click(addButton);
+
+    const nameInputAdd = screen.getByLabelText(/name/i);
+    const emailInputAdd = screen.getByLabelText(/email/i);
+    const passwordInputAdd = screen.getByLabelText(/password/i);
+
+    // Checking that the fields are empty
+    expect(nameInputAdd).toHaveValue('');   
+    expect(emailInputAdd).toHaveValue('');
+    expect(passwordInputAdd).toHaveValue(''); 
+
+    // Typing new values in the fields
+
+    await userEvent.type(nameInputAdd, 'Benjamin');
+    await userEvent.type(emailInputAdd, 'ben@gmail.com');
+    await userEvent.type(passwordInputAdd, 'ben123');
+
+    //Checking that the values are correct
+    expect(nameInputAdd).toHaveValue('Benjamin');   
+    expect(emailInputAdd).toHaveValue('ben@gmail.com');
+    expect(passwordInputAdd).toHaveValue('ben123'); 
+
+})
+})
+
+  //18 Clicking Save when no record is selected and when data has been entered into the Add-update form fields should add a new record
+
+  describe("Customer Table Loading", ()=> {
+    it('loads the customer table', async () => {
+    render(<App />);
+
+    const addButton = screen.getByRole('button', { name: /add/i });
+    await userEvent.click(addButton);
+
+    expect(screen.getByText(/Add New Customer/i)).toBeInTheDocument();
+
+    const nameInputAdd = screen.getByLabelText(/name/i);
+    const emailInputAdd = screen.getByLabelText(/email/i);
+    const passwordInputAdd = screen.getByLabelText(/password/i);
+
+    // Checking that the fields are empty
+    expect(nameInputAdd).toHaveValue('');   
+    expect(emailInputAdd).toHaveValue('');
+    expect(passwordInputAdd).toHaveValue(''); 
+
+    // Typing new values in the fields
+
+    await userEvent.type(nameInputAdd, 'Lucas');
+    await userEvent.type(emailInputAdd, 'lucas@gmail.com');
+    await userEvent.type(passwordInputAdd, 'lucas123');
+
+    //Checking that the values are correct
+    expect(nameInputAdd).toHaveValue('Lucas');   
+    expect(emailInputAdd).toHaveValue('lucas@gmail.com');
+    expect(passwordInputAdd).toHaveValue('lucas123'); 
+
+    const saveButton = screen.getByRole('button', { name: /save/i });
+    await userEvent.click(saveButton);
+
+    expect(screen.getByText("Lucas")).toBeInTheDocument();
+    expect(emailInputAdd).toHaveValue('lucas@gmail.com');
+    expect(passwordInputAdd).toHaveValue('lucas123'); 
+
+    const lucasRow = await screen.findByText("Lucas");
+    const lucasTr = lucasRow.closest('tr');
+    await waitFor(() => {
+      expect(lucasTr).toHaveStyle({ fontWeight: 'normal'})}); 
+
+
+
+
+
+
+})
+})
+
+
+
+
+
+
+
+
+})
+})
+
+
+
+
 
   });
     });
