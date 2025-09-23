@@ -137,7 +137,7 @@ function App() {
           <div className="d-flex justify-content-between align-items-center mb-4"></div>
           <div className="card">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h5 className="mb-0">Customer Database</h5>
+              <h5 className="mb-0">Customer List</h5>
               <div id="control-button-div" className='d-flex gap-2'>
                 <button 
                   id="add-button" 
@@ -150,7 +150,8 @@ function App() {
               </div>
             </div>
             <div className="card-body p-0">
-              <div className="table-responsive">
+
+              <div style={{ maxHeight: '300px', overflowY: 'auto' }} data-testid='customer-table'>
                 <CustomerTable
                   customers={records}
                   selectedId={selectedRecordId}
@@ -171,6 +172,7 @@ function App() {
             <CustomerForm
               mode={isAddMode ? 'add' : 'update'}
               customer={isAddMode ? undefined : selectedCustomer}
+              customers={records}
               onSave={handleSave}
               onDelete={handleDelete}
               onCancel={handleCancel}
