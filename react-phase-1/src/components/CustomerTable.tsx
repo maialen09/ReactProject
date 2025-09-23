@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Customer } from '../App';
+import './CustomerTable.css';
 
 interface CustomerTableProps {
   customers: Customer[];
@@ -9,7 +10,7 @@ interface CustomerTableProps {
 
 const CustomerTable: React.FC<CustomerTableProps> = ({ customers, selectedId, onRowClick }) => {
   return (
-    <table className="table table-striped table-hover mb-0">
+    <table className="table table-striped table-hover mb-0 table-fixed-header">
       <thead className="table-dark">
         <tr>
           <th scope="col">#</th>
