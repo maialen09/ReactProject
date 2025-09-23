@@ -53,6 +53,18 @@
       "email": "wasadmin@gamil.xom",
       "password": "wasadmin",
       "id": 11
+    },
+    {
+      "name": "ddd",
+      "email": "kim@mail.com",
+      "password": "wasadmin",
+      "id": 12
+    },
+    {
+      "name": "kim",
+      "email": "kim@alal.com",
+      "password": "wasadmin",
+      "id": 13
     }
   ]
 }

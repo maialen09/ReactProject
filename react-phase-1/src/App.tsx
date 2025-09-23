@@ -135,6 +135,9 @@ function App() {
       <div className="row">
         <div className="col-12">
           <div className="d-flex justify-content-between align-items-center mb-4"></div>
+          {!isAddMode && selectedRecordId !== NO_SELECTION && (
+            <div className='error-message'>⚠️ Please remove the current selection to enable the add button</div>
+          )}
           <div className="card">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h5 className="mb-0">Customer List</h5>

@@ -1,4 +1,8 @@
-.number-of-customers {
+.number-of-customers, .error-message {
     font-weight: bold;
-    margin-top: 10px;
-}   
+    margin: 5px;
+}
+
+.error-message {
+    color: var(--brand-red);
+}
