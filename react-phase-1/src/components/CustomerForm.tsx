@@ -28,7 +28,19 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, onSave, onD
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({ name, email, password });
+    if (checkEmail(email)) {
+      onSave({ name, email, password });
+    }
+  };
+  
+  const checkEmail = (email: any) => {
+    let mail = email as string;
+    if (mail.includes('@') && mail.includes('.')) {
+      return true;
+    }else {
+      alert("Please enter a valid email address."); 
+    }
+    return false;
   };
 
   return (
@@ -42,37 +54,40 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, onSave, onD
             <div className="col-md-4 mb-3">
               <label htmlFor="customerName" className="form-label">Name</label>
               <input
-                type="text"
-                className="form-control"
-                id="customerName"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter customer name"
-                required
+          type="text"
+          className="form-control"
+          id="customerName"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter customer name"
+          required
+          minLength={1}
               />
             </div>
             <div className="col-md-4 mb-3">
               <label htmlFor="customerEmail" className="form-label">Email</label>
               <input
-                type="email"
-                className="form-control"
-                id="customerEmail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter email address"
-                required
+          type="email"
+          className="form-control"
+          id="customerEmail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter email address"
+          //required
+         // pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
               />
             </div>
             <div className="col-md-4 mb-3">
               <label htmlFor="customerPassword" className="form-label">Password</label>
               <input
-                type="password"
-                className="form-control"
-                id="customerPassword"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                required
+          type="password"
+          className="form-control"
+          id="customerPassword"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter password"
+          required
+          minLength={1}
               />
             </div>
           </div>
