@@ -7,7 +7,7 @@ import App from './App';
 
 // 1.1 Checking that the table of customers loads
 describe("Customer Table Loading", ()=> {
-    it('App renders', () => {
+    it('loads the customer table', () => {
     render(<App />);
     let element = screen.getByTestId("customer-table");
     expect(element).toBeInTheDocument()
@@ -17,7 +17,6 @@ describe("Customer Table Loading", ()=> {
 //1.2 The customer list should show all available customer records
 describe("Customer Table Rendering", () => {
   it('renders customer rows correctly', async () => {
-    // Mock fetch to return sample customers
     window.fetch = async () =>
       ({
         ok: true,
@@ -48,8 +47,7 @@ describe("Database name appears above table", () => {
 
 //3.1, 3.2 Checking that Name, Email and Password appear in the table
 describe("Name, Email and Password checking", () => {
-  it('renders customer rows correctly', async () => {
-    // Mock fetch to return sample customers
+  it('checks the different inputs appear in the table', async () => {
     window.fetch = async () =>
       ({
         ok: true,
@@ -78,7 +76,6 @@ describe("Name, Email and Password checking", () => {
 
 describe("Add/Update Form Field Entry", () => {
   it('allows entry of text for name, email, and password fields', async () => {
-    // Mock fetch to return empty customers for add mode
     window.fetch = async () =>
       ({
         ok: true,
@@ -121,11 +118,10 @@ describe("Customer row selection", () => {
 
     render(<App />);
 
-    // Wait for the table to render
     const aliceRow = await screen.findByText("Alice");
     const aliceTr = aliceRow.closest('tr');
 
-     const bobRow = await screen.findByText("Bob");
+    const bobRow = await screen.findByText("Bob");
     const bobTr = bobRow.closest('tr');
 
     // Simulate clicking on Alice's row
@@ -133,14 +129,15 @@ describe("Customer row selection", () => {
 
     // Check if Alice's row is now bold
     expect(aliceTr).toHaveStyle({ fontWeight: 'bold' });
+    // Check that Bob's row is not bold
     expect(bobTr).toHaveStyle({ fontWeight: 'normal' });
   });
 });
 
 // 5.1 Checking of the fontWeight changes when a customer is deselected
 
-describe("Customer row selection", () => {
-  it('allows users to select a record by clicking on it', async () => {
+describe("Changes in style when a customer is selected", () => {
+  it('changes the fontWeight of a selected customer', async () => {
     window.fetch = async () =>
       ({
         ok: true,
@@ -152,7 +149,6 @@ describe("Customer row selection", () => {
 
     render(<App />);
 
-    // Wait for the table to render
     const aliceRow = await screen.findByText("Alice");
     const aliceTr = aliceRow.closest('tr');
 
@@ -163,13 +159,11 @@ describe("Customer row selection", () => {
     // Check if Alice's row is now bold
     expect(aliceTr).toHaveStyle({ fontWeight: 'bold' });
 
-
+    // Simulate clicking again to deselect
     await userEvent.click(aliceRow);
 
+    // Check that Alice's row is no longer bold 
     expect(aliceTr).toHaveStyle({ fontWeight: 'normal' });
-
-
-
 
   });
 
@@ -188,7 +182,6 @@ describe("Customer row selection", () => {
 
       render(<App />);
 
-      // Wait for the table to render
       const aliceRow = await screen.findByText("Alice");
 
       // Simulate clicking on Alice's row
@@ -227,7 +220,6 @@ describe("Customer row selection", () => {
 
       render(<App />);
 
-      // Wait for the table to render
       const aliceRow = await screen.findByText("Alice");
 
       // Simulate clicking on Alice's row
@@ -242,14 +234,14 @@ describe("Customer row selection", () => {
 
   //7.2 The add form is showing when the Add button is clicked
   describe("Add form appears and populates correctly", () => {
-    it('shows add form with correct data when a customer row is clicked', async () => {
+    it('shows add form correctly', async () => {
 
       render(<App />);
 
        const addButton = screen.getByRole('button', { name: /add/i });
        await userEvent.click(addButton);
 
-      // Check that the update form appears and is populated with Alice's data
+      // Check that the add form appears
       expect(screen.getByText(/Add New Customer/i)).toBeInTheDocument();
 
 
