@@ -1,0 +1,14 @@
+name: React Project Phase 1 CI/CD
+on:
+  push:
+    branches: [ "Release5" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Echo to standard output
+        run:
+          echo "This is a placeholder step. Add your build and deployment steps here."  
