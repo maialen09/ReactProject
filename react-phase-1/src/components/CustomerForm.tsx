@@ -92,7 +92,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, onSave, onD
             </div>
           </div>
           <div className="d-flex gap-2 mt-3">
-            <button type="submit" className="btn btn-success" onClick={handleSave}>Save</button>
+            <button type="submit" className="btn btn-primary" onClick={handleSave}>Save</button>
             {mode === 'update' && (
               <button type="button" className="btn btn-danger" onClick={onDelete}>Delete</button>
             )}

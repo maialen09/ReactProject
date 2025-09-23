@@ -1,26 +1,63 @@
 .table-fixed-header{
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
+    border: 1px solid #ddd;
 }
 
 .table-fixed-header thead th {
     position: sticky;
     top: 0;
     z-index: 2;
-    /*background-color: red; /* Change this to your desired background color */
+    background-color: var(--bs-dark, #212529);
+    color: white;
 }
 
-/* Ensuring only the body scrolls */
-.table-fixed-header tbody {
-    display: block;
-    max-height: 300px; /* Set your desired height */
+/* Container for the scrollable table */
+.table-responsive {
+    max-height: 400px;
     overflow-y: auto;
+    border: 1px solid #ddd;
 }
 
-/* Heaap header/body column widths aligned */
-.table-fixed-header thead, .table-fixed-header tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed; /* Ensures that the columns have a fixed width */
+/* Improved styling for better appearance */
+.table-fixed-header th, .table-fixed-header td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.table {
+    --bs-table-striped-bg: var(--brand-light-navy);
+    --bs-table-hover-bg: var(--brand-light-red);
+}
+
+/* Remove border from last column */
+.table-fixed-header th:last-child, 
+.table-fixed-header td:last-child {
+    border-right: none;
+}
+
+/* Ensure proper column widths */
+.table-fixed-header th:nth-child(1),
+.table-fixed-header td:nth-child(1) {
+    width: 10%;
+}
+
+.table-fixed-header th:nth-child(2),
+.table-fixed-header td:nth-child(2) {
+    width: 25%;
+}
+
+.table-fixed-header th:nth-child(3),
+.table-fixed-header td:nth-child(3) {
+    width: 35%;
+}
+
+.table-fixed-header th:nth-child(4),
+.table-fixed-header td:nth-child(4) {
+    width: 30%;
 }
 

@@ -27,7 +27,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({ customers, selectedId, on
             onClick={() => onRowClick(customer.id)}
             style={{ cursor: 'pointer', fontWeight: selectedId === customer.id ? 'bold' : 'normal' }}
           >
-            <th scope="row">{customer.id}</th>
+            <td>{customer.id}</td>
             <td><span>{customer.name}</span></td>
             <td><span>{customer.email}</span></td>
             <td><span>{customer.password}</span></td>
