@@ -396,6 +396,75 @@ describe("Changes in style when a customer is selected", () => {
     });
 
 
+  // 12. Users are able to modify the fields of the add-update form
+
+  describe("Modifying fields of the form", ()=> {
+    it('changes correctly the input values of the form', async () => {
+      let customers = [
+  { id: 1, name: "Tom", email: "tom@example.com", password: "pass10" },
+  { id: 2, name: "Leo", email: "leo@example.com", password: "pass11" }
+];
+  window.fetch = async (_, options) => {
+  if (options && options.method === 'PUT') {
+    // Parse the updated customer from the request body
+    const updatedCustomer = JSON.parse(options.body as string);
+    customers = customers.map(c =>
+      c.id === updatedCustomer.id ? updatedCustomer : c
+    );
+    return { ok: true, json: async () => updatedCustomer } as Response;
+  }
+  return { ok: true, json: async () => customers } as Response;
+};
+    render(<App />);
+
+    // Changing the values of the update form 
+
+    const leoRow = await screen.findByText("Leo");
+    await userEvent.click(leoRow);  
+
+    const nameInput = screen.getByLabelText(/name/i);
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i); 
+
+    const nameValue = nameInput.getAttribute('value');
+    expect(nameValue).toBe("Leo");
+await userEvent.clear(nameInput);
+await userEvent.type(nameInput, 'Leonardo');
+await waitFor(() => {
+  expect(nameInput).toHaveValue('Leonardo');
+});
+
+const emailValue = emailInput.getAttribute('value');
+expect(emailValue).toBe("leo@example.com");
+await userEvent.clear(emailInput);
+await userEvent.type(emailInput, 'leo@gmail.com');
+await waitFor(() => {
+  expect(emailInput).toHaveValue('leo@gmail.com');
+});
+
+const passwordValue = passwordInput.getAttribute('value');
+expect(passwordValue).toBe("pass11");
+await userEvent.clear(passwordInput);
+await userEvent.type(passwordInput, 'pass20');
+await waitFor(() => {
+  expect(passwordInput).toHaveValue('pass20');
+});
+
+const saveButton = screen.getByRole('button', { name: /save/i });
+await userEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(screen.getByText("Leonardo")).toBeInTheDocument();
+    expect(screen.getByText("leo@gmail.com")).toBeInTheDocument();
+    expect(screen.getByText("pass20")).toBeInTheDocument();
+
+});
+
+    
+
+})
+})
   
+
   });
     });
