@@ -232,9 +232,18 @@ describe("Changes in style when a customer is selected", () => {
     });
   });
 
-  //7.2 The add form is showing when the Add button is clicked
-  describe("Add form appears and populates correctly", () => {
-    it('shows add form correctly', async () => {
+  //7 The add form and the update form shows correctly 
+  describe("Add and Update forms appears and populates correctly", () => {
+    it('shows add/update form correctly', async () => {
+
+      window.fetch = async () =>
+        ({
+          ok: true,
+          json: async () => [
+            { id: 1, name: "Alice", email: "alice@example.com", password: "pass1" },
+            { id: 2, name: "Bob", email: "bob@example.com", password: "pass2" }
+          ]
+        } as Response);
 
       render(<App />);
 
@@ -243,6 +252,18 @@ describe("Changes in style when a customer is selected", () => {
 
       // Check that the add form appears
       expect(screen.getByText(/Add New Customer/i)).toBeInTheDocument();
+
+      const aliceRow = await screen.findByText("Alice");
+
+      await userEvent.click(aliceRow);
+
+      expect(screen.getByRole('heading', { level: 5, name: /Update Customer/i })).toBeInTheDocument();
+
+      expect(screen.queryByText(/Add New Customer/i)).not.toBeInTheDocument();
+
+
+
+
 
 
     });
