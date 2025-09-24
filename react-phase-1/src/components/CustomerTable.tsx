@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Customer } from '../App';
+import type { Customer } from './Dashboard';
 import './CustomerTable.css';
 
 interface CustomerTableProps {

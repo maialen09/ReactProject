@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Customer } from '../App';
+import type { Customer } from './Dashboard';
 
 interface CustomerFormProps {
   mode: 'add' | 'update';
