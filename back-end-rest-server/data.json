@@ -1,70 +1,22 @@
 {
   "customers": [
     {
-      "name": "Maialen ",
-      "email": "maialentorre",
-      "password": "fdhdhah",
+      "name": "Kim Richards",
+      "email": "kim@example.com",
+      "password": "password123",
       "id": 1
     },
     {
-      "name": "z",
-      "email": "wasadmin",
-      "password": "wasadmin",
+      "name": "Ourmar",
+      "email": "Ourmar@example.com",
+      "password": "pasword1234",
       "id": 2
     },
     {
-      "id": 3,
-      "name": "",
-      "email": "",
-      "password": ""
-    },
-    {
-      "name": "example@lol.com",
-      "email": "wasadminCCC",
-      "password": "wasadmin",
-      "id": 6
-    },
-    {
-      "name": "CCC",
-      "email": "wasadmin",
-      "password": "wasadmin",
-      "id": 7
-    },
-    {
-      "name": "CCC",
-      "email": "example@lol.com",
-      "password": "wasadmin",
-      "id": 8
-    },
-    {
-      "name": "SSSS",
-      "email": "example@lol.com",
-      "password": "wasadmin",
-      "id": 9
-    },
-    {
-      "name": "VVVV",
-      "email": "example@lol.com",
-      "password": "wasadmin",
-      "id": 10
-    },
-    {
-      "name": "Kim",
-      "email": "wasadmin@gamil.xom",
-      "password": "wasadmin",
-      "id": 11
-    },
-    {
-      "name": "ddd",
-      "email": "kim@mail.com",
-      "password": "wasadmin",
-      "id": 12
-    },
-    {
-      "name": "kim",
-      "email": "kim@alal.com",
-      "password": "wasadmin",
-      "id": 13
+      "name": "Maialen",
+      "email": "Maialen@example.com",
+      "password": "password321",
+      "id": 3
     }
   ]
 }
