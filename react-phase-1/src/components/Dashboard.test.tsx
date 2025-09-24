@@ -2,13 +2,20 @@ import { describe, expect, it } from 'vitest'
 import {render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import userEvent from '@testing-library/user-event';
-import App from './App';
+import App from '../App';
+import Dashboard from './Dashboard';
+
+// Helper function to render Dashboard with required props
+const renderDashboard = () => {
+  return render(<Dashboard onLogin={() => {}} />);
+};
+
 
 
 // 1.1 Checking that the table of customers loads
 describe("Customer Table Loading", ()=> {
     it('loads the customer table', () => {
-    render(<App />);
+    renderDashboard();
     let element = screen.getByTestId("customer-table");
     expect(element).toBeInTheDocument()
 })
@@ -26,7 +33,7 @@ describe("Customer Table Rendering", () => {
         ]
       } as Response);
 
-    render(<App />);
+    renderDashboard();
 
     // Check for customer names in the table
     expect(await screen.findByText("Alice")).toBeInTheDocument();
@@ -37,7 +44,7 @@ describe("Customer Table Rendering", () => {
 //2.1, 2.2 The label of the table appears above the list of customers
 describe("Database name appears above table", () => {
     it('h5 is above the table element', async () => {
-        render(<App />);
+        renderDashboard();
         const heading = screen.getByRole('heading', { level: 5, name: /Customer List/i });
         const table = await screen.findByTestId("customer-table");
         // Check that heading comes before table in the DOM
@@ -57,7 +64,7 @@ describe("Name, Email and Password checking", () => {
         ]
       } as Response);
 
-    render(<App />);
+    renderDashboard();
 
     // Check for customer names in the table
     expect(await screen.findByText("Tom")).toBeInTheDocument();
@@ -82,7 +89,7 @@ describe("Add/Update Form Field Entry", () => {
         json: async () => []
       } as Response);
 
-    render(<App />);
+    renderDashboard();
     // Click the Add button to show the form
     const addButton = screen.getByRole('button', { name: /add/i });
     await userEvent.click(addButton);
@@ -116,7 +123,7 @@ describe("Customer row selection", () => {
         ]
       } as Response);
 
-    render(<App />);
+    renderDashboard();
 
     const aliceRow = await screen.findByText("Alice");
     const aliceTr = aliceRow.closest('tr');
@@ -147,7 +154,7 @@ describe("Changes in the style when a customer is selected", () => {
         ]
       } as Response);
 
-    render(<App />);
+    renderDashboard();
 
     const aliceRow = await screen.findByText("Alice");
     const aliceTr = aliceRow.closest('tr');
@@ -180,7 +187,7 @@ describe("Changes in the style when a customer is selected", () => {
           ]
         } as Response);
 
-      render(<App />);
+      renderDashboard();
 
       const aliceRow = await screen.findByText("Alice");
 
@@ -218,7 +225,7 @@ describe("Changes in the style when a customer is selected", () => {
           ]
         } as Response);
 
-      render(<App />);
+      renderDashboard();
 
       const aliceRow = await screen.findByText("Alice");
 
@@ -245,7 +252,7 @@ describe("Changes in the style when a customer is selected", () => {
           ]
         } as Response);
 
-      render(<App />);
+      renderDashboard();
 
        const addButton = screen.getByRole('button', { name: /add/i });
        await userEvent.click(addButton);
@@ -277,7 +284,7 @@ describe("Changes in the style when a customer is selected", () => {
           ]
         } as Response);
 
-      render(<App />);
+      renderDashboard();
 
       const tomRow = await screen.findByText("Tom");
       const leoRow = await screen.findByText("Leo");
@@ -319,7 +326,7 @@ describe("Changes in the style when a customer is selected", () => {
           ]
         } as Response);
 
-        render(<App />);
+        renderDashboard();
 
        const addButton = screen.getByRole('button', { name: /add/i });
        await userEvent.click(addButton);
@@ -375,7 +382,7 @@ describe("Changes in the style when a customer is selected", () => {
           return { ok: true, json: async () => customers } as Response;
         };
 
-        render(<App />);
+        renderDashboard();
 
         const aliceRow = await screen.findByText("Alice");
         await userEvent.click(aliceRow);
@@ -411,7 +418,7 @@ describe("Changes in the style when a customer is selected", () => {
   }
   return { ok: true, json: async () => customers } as Response;
 };
-    render(<App />);
+    renderDashboard();
 
     // Changing the values of the update form 
 
@@ -467,7 +474,7 @@ await userEvent.click(saveButton);
 
 describe("Empty input should be replaced with typed text", ()=> {
     it('replace the empty inputs with the text inserted', async () => {
-    render(<App />);
+    renderDashboard();
 
     // Changing values of the add form
     const addButton = screen.getByRole('button', { name: /add/i });
@@ -520,7 +527,7 @@ describe("Save button management", ()=> {
   }
   return { ok: true, json: async () => customers } as Response;
 };
-    render(<App />);
+    renderDashboard();
 
     const mickRow = await screen.findByText("Mick");
     await userEvent.click(mickRow); 
@@ -617,7 +624,7 @@ describe("Save button management", ()=> {
             { id: 2, name: "Leo", email: "leo@example.com", password: "pass11" }
           ]
         } as Response);
-    render(<App />);
+    renderDashboard();
 
     const timRow = await screen.findByText("Tim");
     const leoRow = await screen.findByText("Leo");
@@ -649,7 +656,7 @@ describe("Save button management", ()=> {
 
 describe("Insertion of new data when no record is selected", ()=> {
     it('adds correctly the data of a new customer', async () => {
-    render(<App />);
+    renderDashboard();
 
     const addButton = screen.getByRole('button', { name: /add/i });
     await userEvent.click(addButton);
@@ -681,7 +688,7 @@ describe("Insertion of new data when no record is selected", ()=> {
 
   describe("Save button updates the changes", ()=> {
     it('updates correctly the changes using the save button ', async () => {
-    render(<App />);
+    renderDashboard();
 
     const addButton = screen.getByRole('button', { name: /add/i });
     await userEvent.click(addButton);

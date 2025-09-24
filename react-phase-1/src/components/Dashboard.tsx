@@ -11,7 +11,11 @@ export interface Customer {
   password: string;
 }
 
-function Dashboard() {
+interface DashboardFormProps {
+  onLogin: (x: boolean) => void;
+}
+
+const Dashboard: React.FC<DashboardFormProps> = ({ onLogin }) => {
 
   //memdb data
   //var customers: Customer[] = getAll();
@@ -156,8 +160,9 @@ function Dashboard() {
             <div className="card-header d-flex justify-content-between align-items-center">
               <h5 className="mb-0">Customer List</h5>
               
-              {/* Add Button */}
+              
               <div id="control-button-div" className='d-flex gap-2'>
+                {/* Add Button */}
                 <button
                   id="add-button"
                   className={`btn ${selectedRecordId !== NO_SELECTION ? 'btn-outline-primary' : 'btn-primary'}`}
@@ -165,6 +170,14 @@ function Dashboard() {
                   onClick={handleAdd}
                 >
                   Add
+                </button>
+                {/* Logout Button */}
+                <button
+                  id="logout-button"
+                  className="btn btn-danger"
+                  onClick={() => onLogin(false)}
+                >
+                  Logout
                 </button>
               </div>
             </div>

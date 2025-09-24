@@ -12,9 +12,9 @@ function App() {
     // Logic for determining whether to show login or dashboard
     <div className="App">
       {!isLoggedIn ? (
-        <LoginForm onLogin={() => setIsLoggedIn(true)} />
+        <LoginForm onLogin={(x: boolean) => setIsLoggedIn(x)} />
       ) : (
-        <Dashboard />
+        <Dashboard onLogin={(x: boolean) => setIsLoggedIn(x)} />
       )}
     </div>
   )

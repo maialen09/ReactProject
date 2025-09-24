@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 
 interface LoginFormProps {
-  onLogin: () => void;
+  onLogin: (x: boolean) => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
@@ -19,7 +19,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     
     if (email === VALID_EMAIL && password === VALID_PASSWORD) {
       setError('');
-      onLogin(); // Call the parent's (App.tsx) onLogin function to change state
+      onLogin(true); // Call the parent's (App.tsx) onLogin function to change state
     } else {
       // Set error message for invalid credentials
       setError('Invalid email or password');
