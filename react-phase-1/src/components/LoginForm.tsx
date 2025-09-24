@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
-import './CustomerTable.css'; // Reuse table styling for consistency
+
 
 interface LoginFormProps {
-  onLogin: (email: string, password: string) => void;
+  onLogin: () => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); // Error message state, to store type of error encountered
+
+  // Hardcoded credentials for demo purposes, will be replaced with real auth later
+  const VALID_EMAIL = 'admin@example.com';
+  const VALID_PASSWORD = 'password123';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onLogin(email, password);
+    
+    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+      setError('');
+      onLogin(); // Call the parent's (App.tsx) onLogin function to change state
+    } else {
+      // Set error message for invalid credentials
+      setError('Invalid email or password');
+    }
   };
 
   return (
@@ -20,6 +32,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         <h5 className="mb-0">Login</h5>
       </div>
       <div className="card-body">
+        {/* Error Alert */}
+        {/* If there's an error, show a bootstrap alert */}
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+        
         <form onSubmit={handleSubmit} data-testid="login-form">
           <div className="mb-3">
             <label htmlFor="loginEmail" className="form-label">Email</label>
@@ -47,6 +67,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           </div>
           <button type="submit" className="btn btn-primary w-100">Login</button>
         </form>
+        
+        {/* Demo credentials */}
+        <div className="text-center mt-3">
+          <small className="text-muted">
+            Demo: admin@example.com / password123
+          </small>
+        </div>
       </div>
     </div>
   );

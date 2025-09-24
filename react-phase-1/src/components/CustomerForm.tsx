@@ -92,6 +92,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ mode, customer, customers, 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter email address"
+                required
               />
             </div>
             {/* Password Label & Input */}

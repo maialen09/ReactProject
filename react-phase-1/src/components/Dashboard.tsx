@@ -24,6 +24,8 @@ function Dashboard() {
   const [isAddMode, setIsAddMode] = useState(false);
   //const NO_SELECTION = records.length > 0 ? Math.min(...records.map(c => c.id)) - 1 : -1;
 
+
+
   // fetch customers from API
   useEffect(() => {
     const fetchCustomers = async () => {
