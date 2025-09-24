@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logo from '../assets/team_crochet_logo.png'; 
 
 
 interface LoginFormProps {
@@ -41,6 +42,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         )}
         
         <form onSubmit={handleSubmit} data-testid="login-form">
+          <div className="mb-3 text-center">
+            <img src={logo} alt="Team Crochet Logo" className="img-fluid mb-3" style={{ maxWidth: 60, display: 'inline-block' }} />
+          </div>
           <div className="mb-3">
             <label htmlFor="loginEmail" className="form-label">Email</label>
             <input
