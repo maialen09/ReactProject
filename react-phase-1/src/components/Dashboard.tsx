@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './Dashboard.css'
 import CustomerTable from './CustomerTable';
 import CustomerForm from './CustomerForm';
+import logo from '../assets/team_crochet_logo.png';
 
 export interface Customer {
   id: number;
@@ -150,6 +151,10 @@ const Dashboard: React.FC<DashboardFormProps> = ({ onLogin }) => {
     <div className="container mt-5">
       <div className="row">
         <div className="col-12">
+          {/* Centered logo at the top */}
+          <div className="mb-4 text-center">
+            <img src={logo} alt="Team Crochet Logo" className="img-fluid mb-3" style={{ maxWidth: 100, display: 'inline-block' }} />
+          </div>
           <div className="d-flex justify-content-between align-items-center mb-4"></div>
           {/* If not in add mode and a record is selected, show a warning to clear selection before adding */}
           {!isAddMode && selectedRecordId !== NO_SELECTION && (
